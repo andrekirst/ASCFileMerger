@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Button x:Name="buttonDateienAuswaehlen" Content="Dateien auswählen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="158" Click="buttonDateienAuswaehlen_Click"/>
+        <Label x:Name="labelSpaltenname" Content="Attribut für Spaltenname" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Width="158"/>
+        <TextBox x:Name="textBoxSpaltenname" HorizontalAlignment="Left" Height="23" Margin="173,52,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" TextChanged="textBoxSpaltenname_TextChanged"/>
+        <Button x:Name="buttonGenerierenUndSpeichern" Content="Generieren und Speichern" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="158" Click="buttonGenerierenUndSpeichern_Click" IsEnabled="False"/>
+        <Label x:Name="labelNDateienausgewaehlt" Content="" HorizontalAlignment="Left" Margin="173,17,0,0" VerticalAlignment="Top" Width="334"/>
     </Grid>
 </Window>

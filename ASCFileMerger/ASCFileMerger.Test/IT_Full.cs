@@ -1,0 +1,27 @@
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
+
+namespace ASCFileMerger.Test
+{
+    [TestClass]
+    public class IT_Full
+    {
+        [TestMethod, TestCategory("IntegrationTest")]
+        public void IT_Full_Merge_2_Files()
+        {
+            string[] fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten");
+
+            ASCMerger merger = new ASCMerger(filenames: fileNames, columnName: "ColumnName");
+
+            string actual = merger.GeneriereTextAusgabe();
+
+            string expected = "Spalte1,Spalte2" + Environment.NewLine +
+                "-2,-3" + Environment.NewLine +
+                "-3,-2" + Environment.NewLine +
+                "-2,-2";
+
+            Assert.AreEqual(expected, actual);
+        }
+    }
+}
