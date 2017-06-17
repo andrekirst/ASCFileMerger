@@ -4,13 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ASCFileMerger"
+        WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="ASC Datei-Merger" Height="500" Width="525">
     <Grid>
-        <Button x:Name="buttonDateienAuswaehlen" Content="Dateien auswählen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="158" Click="buttonDateienAuswaehlen_Click"/>
-        <Label x:Name="labelSpaltenname" Content="Attribut für Spaltenname" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Width="158"/>
-        <TextBox x:Name="textBoxSpaltenname" HorizontalAlignment="Left" Height="23" Margin="173,52,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="120" TextChanged="textBoxSpaltenname_TextChanged"/>
-        <Button x:Name="buttonGenerierenUndSpeichern" Content="Generieren und Speichern" HorizontalAlignment="Left" Margin="10,119,0,0" VerticalAlignment="Top" Width="158" Click="buttonGenerierenUndSpeichern_Click" IsEnabled="False"/>
-        <Label x:Name="labelNDateienausgewaehlt" Content="" HorizontalAlignment="Left" Margin="173,17,0,0" VerticalAlignment="Top" Width="334"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="buttonDateienAuswaehlen" Content="Dateien auswählen" Margin="5,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="buttonDateienAuswaehlen_Click"/>
+        <Label x:Name="labelSpaltenname" Content="Attribut für Spaltenname" Margin="5,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="1"/>
+        <TextBox x:Name="textBoxSpaltenname" HorizontalAlignment="Stretch" Margin="5,0,5,0" Height="24" TextWrapping="NoWrap" Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" TextChanged="textBoxSpaltenname_TextChanged" Grid.Column="1" Grid.Row="1"/>
+        <Button x:Name="buttonGenerierenUndSpeichern" Margin="5,10" Content="Generieren und Speichern" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="buttonGenerierenUndSpeichern_Click" IsEnabled="False" Grid.Row="3"/>
+        <Label x:Name="labelNDateienausgewaehlt" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="0,7"/>
+        <Label x:Name="labelErgebnis" Content="" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" />
+        <DataGrid x:Name="dataGridDatensaetze" ItemsSource="{Binding}" Margin="5,5,5,5" AutoGenerateColumns="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.ColumnSpan="3" Grid.Row="4"/>
     </Grid>
 </Window>

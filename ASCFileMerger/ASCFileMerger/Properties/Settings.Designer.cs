@@ -23,12 +23,15 @@ namespace ASCFileMerger.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ColumnName")]
         public string DefaultColumnName {
             get {
                 return ((string)(this["DefaultColumnName"]));
+            }
+            set {
+                this["DefaultColumnName"] = value;
             }
         }
     }

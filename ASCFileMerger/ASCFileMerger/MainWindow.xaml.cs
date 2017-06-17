@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,7 @@ namespace ASCFileMerger
         {
             InitializeComponent();
 
+            Settings.Default.Reload();
             textBoxSpaltenname.Text = Settings.Default.DefaultColumnName;
         }
 
@@ -41,9 +43,10 @@ namespace ASCFileMerger
             {
                 fileNames = ofd.FileNames;
                 buttonGenerierenUndSpeichern.IsEnabled = true;
+                labelNDateienausgewaehlt.Content = String.Format("{0} Datei(-en) ausgewählt", fileNames.Count());
+                labelErgebnis.Content = String.Empty;
+                dataGridDatensaetze.DataContext = null;
             }
-
-            labelNDateienausgewaehlt.Content = String.Format("{0} Datei(-en) ausgewählt", fileNames.Count());
         }
 
         public ASCMerger Merger
@@ -55,6 +58,45 @@ namespace ASCFileMerger
         {
             Merger = new ASCFileMerger.ASCMerger(fileNames, textBoxSpaltenname.Text);
 
+            DateiSpeichern();
+            DataGridFuellen();
+        }
+
+        private void DataGridFuellen()
+        {
+            try
+            {
+                DataTable dataTable = new DataTable();
+
+                List<Datensatz> datensaetze = Merger.DateienAuslesenUndInDatensaetzeSpeichern();
+
+                foreach(Datensatz datensatz in datensaetze)
+                {
+                    dataTable.Columns.Add(datensatz.Spaltenname, typeof(double));
+                }
+
+                for(int indexWerte = 0; indexWerte < datensaetze[0].Werte.Count(); indexWerte++)
+                {
+                    DataRow row = dataTable.NewRow();
+
+                    for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
+                    {
+                        row[datensaetze[indexDatensaetze].Spaltenname] = datensaetze[indexDatensaetze].Werte[indexWerte];
+                    }
+                    dataTable.Rows.Add(row);
+                }
+
+                dataGridDatensaetze.DataContext = dataTable;
+            }
+            catch(Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void DateiSpeichern()
+        {
             string content = Merger.GeneriereTextAusgabe();
 
             FileInfo fi = new FileInfo(fileNames[0]);
@@ -71,12 +113,14 @@ namespace ASCFileMerger
                 targetFileName = sfd.FileName;
 
                 File.WriteAllText(targetFileName, content);
+
+                labelErgebnis.Content = "Fertig";
             }
         }
 
         private void textBoxSpaltenname_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Settings.Default["DefaultColumnName"] = textBoxSpaltenname.Text;
+            Settings.Default.DefaultColumnName = textBoxSpaltenname.Text;
             Settings.Default.Save();
         }
     }

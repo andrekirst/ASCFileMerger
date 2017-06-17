@@ -50,6 +50,11 @@ namespace ASCFileMerger
 
         public List<Datensatz> DateienAuslesenUndInDatensaetzeSpeichern()
         {
+            if(String.IsNullOrEmpty(columnName))
+            {
+                throw new ArgumentException("Attribut für Spaltenname nicht angegeben");
+            }
+
             List<Datensatz> datensaetze = new List<Datensatz>();
             foreach(string file in filenames)
             {
@@ -66,6 +71,10 @@ namespace ASCFileMerger
                     {
                         aktuellerDatensatz.Werte.Add(wert);
                     }
+                }
+                if(String.IsNullOrEmpty(aktuellerDatensatz.Spaltenname))
+                {
+                    throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
                 datensaetze.Add(aktuellerDatensatz);
             }
