@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger", "ASCFileMerger\ASCFileMerger.csproj", "{D7FDC23F-DF18-41CD-B026-F1084E5C133B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger.Test", "ASCFileMerger.Test\ASCFileMerger.Test.csproj", "{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
