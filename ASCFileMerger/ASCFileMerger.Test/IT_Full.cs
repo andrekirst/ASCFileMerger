@@ -17,10 +17,10 @@ namespace ASCFileMerger.Test
 
             string actual = merger.GeneriereTextAusgabe();
 
-            string expected = "Spalte1,Spalte2" + Environment.NewLine +
-                "-2,-3" + Environment.NewLine +
-                "-3,-2" + Environment.NewLine +
-                "-2,-2";
+            string expected = "Spalte1;Spalte2" + Environment.NewLine +
+                "-2;-3" + Environment.NewLine +
+                "-3;-2" + Environment.NewLine +
+                "-2;-2";
 
             Assert.AreEqual(expected, actual);
         }

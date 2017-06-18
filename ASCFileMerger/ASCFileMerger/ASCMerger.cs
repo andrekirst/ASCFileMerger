@@ -57,7 +57,7 @@ namespace ASCFileMerger
 
             for(int i = 0; i < datensaetze.Count; i++)
             {
-                rueckgabe += String.Format("{0}{1}{0}{2}", string.Empty, datensaetze[i].Spaltenname, i == datensaetze.Count - 1 ? string.Empty : ",");
+                rueckgabe += String.Format("{0}{1}{0}{2}", string.Empty, datensaetze[i].Spaltenname, i == datensaetze.Count - 1 ? string.Empty : ";");
             }
 
             for(int indexWerte = 0; indexWerte < minAnzahl; indexWerte++)
@@ -65,7 +65,7 @@ namespace ASCFileMerger
                 rueckgabe += Environment.NewLine;
                 for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
                 {
-                    rueckgabe += String.Format("{0}{1}", datensaetze[indexDatensaetze].Werte[indexWerte], indexDatensaetze == datensaetze.Count - 1 ? String.Empty : ",");
+                    rueckgabe += String.Format("{0}{1}", datensaetze[indexDatensaetze].Werte[indexWerte], indexDatensaetze == datensaetze.Count - 1 ? String.Empty : ";");
                 }
             }
 
