@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="DefaultColumnName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ColumnName</Value>
+      <Value Profile="(Default)">Sample ID:</Value>
     </Setting>
   </Settings>
 </SettingsFile>

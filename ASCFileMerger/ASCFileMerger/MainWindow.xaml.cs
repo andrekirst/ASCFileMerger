@@ -88,10 +88,10 @@ namespace ASCFileMerger
 
                 dataGridDatensaetze.DataContext = dataTable;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
 

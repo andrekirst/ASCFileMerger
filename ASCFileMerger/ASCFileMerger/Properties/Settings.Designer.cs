@@ -25,7 +25,7 @@ namespace ASCFileMerger.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ColumnName")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sample ID:")]
         public string DefaultColumnName {
             get {
                 return ((string)(this["DefaultColumnName"]));
