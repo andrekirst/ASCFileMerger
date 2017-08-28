@@ -73,6 +73,14 @@ namespace ASCFileMerger
             return rueckgabe;
         }
 
+        public static IEnumerable<string> Merge(IEnumerable<string> links, IEnumerable<string> rechts, string trenner)
+        {
+            for(int i = 0; i < links.Count(); i++)
+            {
+                yield return $"{links.ElementAt(i)}{trenner}{rechts.ElementAt(i)}";
+            }
+        }
+
         public List<Datensatz> DateienAuslesenUndInDatensaetzeSpeichern()
         {
             if(String.IsNullOrEmpty(columnName))

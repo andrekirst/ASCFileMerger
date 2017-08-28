@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ASCFileMerger.Test
 {
@@ -24,6 +25,19 @@ namespace ASCFileMerger.Test
             };
 
             CollectionAssert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void Merge_2_Arrays_in_ein_Array_mit_jeweils_1_Header_1_Datenzeile()
+        {
+            string[] links = new string[] { "\"HeaderLinks\"", "\"Wert1\"" };
+            string[] rechts = new string[] { "\"HeaderRechts\"", "\"Wert2\"" };
+            string trenner = ";";
+
+            IEnumerable<string> expected = (new string[] { "\"HeaderLinks\";\"HeaderRechts\"", "\"Wert1\";\"Wert2\"" }).AsEnumerable();
+            IEnumerable<string> actual = ASCMerger.Merge(links: links, rechts: rechts, trenner: trenner);
+
+            CollectionAssert.AreEqual(expected.ToList(), actual.ToList());
         }
     }
 }
