@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ASCFileMerger
 {
@@ -104,7 +105,7 @@ namespace ASCFileMerger
                     throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
                 datensaetze.Add(aktuellerDatensatz);
-            }
+            };
             return datensaetze;
         }
     }
