@@ -16,15 +16,15 @@ namespace ASCFileMerger.Test
 
             ASCMerger merger = new ASCMerger(filenames: fileNames, columnName: "ColumnName");
 
-            List<Datensatz> actual = merger.DateienAuslesenUndInDatensaetzeSpeichern();
+            List<List<string>> actual = merger.DateienAuslesenUndInDatensaetzeSpeichern();
 
-            List<Datensatz> expected = new List<Datensatz>()
+            List<List<string>> expected = new List<List<string>>()
             {
-                new Datensatz() { Spaltenname = "Spalte1", Werte = new List<double>() { -2, -3, -2 } },
-                new Datensatz() { Spaltenname = "Spalte2", Werte = new List<double>() { -3, -2, -2 } }
+                new List<string>() { "Spalte1", "-2", "-3", "-2" },
+                new List<string>() { "Spalte2", "-3", "-2", "-2" }
             };
 
-            CollectionAssert.AreEqual(expected, actual);
+            equalidator.Equalidator.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -38,6 +38,45 @@ namespace ASCFileMerger.Test
             IEnumerable<string> actual = ASCMerger.Merge(links: links, rechts: rechts, trenner: trenner);
 
             CollectionAssert.AreEqual(expected.ToList(), actual.ToList());
+        }
+
+        [TestMethod]
+        public void MergeListListString_3_Einzel_List_Erwarte_Eine_List()
+        {
+            List<List<string>> werte = new List<List<string>>()
+            {
+              new List<string>() { "\"A\"", "\"1\"", "\"2\"" },
+              new List<string>() { "\"B\"", "\"3\"", "\"4\"" },
+              new List<string>() { "\"C\"", "\"5\"", "\"6\"" }
+            };
+
+            List<List<string>> expected = new List<List<string>>()
+            {
+              new List<string>() { "\"A\";\"B\";\"C\"", "\"1\";\"3\";\"5\"", "\"2\";\"4\";\"6\"" }
+            };
+
+            List<List<string>> actual = ASCMerger.MergeListListString(werte: werte, trenner: ";");
+
+            CollectionAssert.AreEqual(expected.First(), actual.First());
+        }
+
+        [TestMethod]
+        public void MergeListListString_2_Einzel_List_Erwarte_Eine_List()
+        {
+            List<List<string>> werte = new List<List<string>>()
+            {
+              new List<string>() { "\"A\"", "\"1\"", "\"2\"" },
+              new List<string>() { "\"B\"", "\"3\"", "\"4\"" }
+            };
+
+            List<List<string>> expected = new List<List<string>>()
+            {
+              new List<string>() { "\"A\";\"B\"", "\"1\";\"3\"", "\"2\";\"4\"" }
+            };
+
+            List<List<string>> actual = ASCMerger.MergeListListString(werte: werte, trenner: ";");
+
+            CollectionAssert.AreEqual(expected.First(), actual.First());
         }
     }
 }

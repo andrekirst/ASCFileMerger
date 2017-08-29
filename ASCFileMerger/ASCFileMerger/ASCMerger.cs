@@ -44,33 +44,67 @@ namespace ASCFileMerger
 
         public string GeneriereTextAusgabe()
         {
-            List<Datensatz> datensaetze = DateienAuslesenUndInDatensaetzeSpeichern();
+            List<List<string>> datensaetze = DateienAuslesenUndInDatensaetzeSpeichern();
 
-            int minAnzahl = datensaetze.Min(d => d.Werte.Count);
-            int maxAnzahl = datensaetze.Max(d => d.Werte.Count);
+            List<string> liste = MergeListListString(werte: datensaetze, trenner: ";").FirstOrDefault();
 
-            if(minAnzahl != maxAnzahl)
+            return string.Join(Environment.NewLine, liste);
+
+            //int minAnzahl = datensaetze.Min(d => d.Werte.Count);
+            //int maxAnzahl = datensaetze.Max(d => d.Werte.Count);
+
+            //if(minAnzahl != maxAnzahl)
+            //{
+            //    return String.Empty;
+            //}
+
+            //string rueckgabe = String.Empty;
+
+            //for(int i = 0; i < datensaetze.Count; i++)
+            //{
+            //    rueckgabe += String.Format("{0}{1}{0}{2}", string.Empty, datensaetze[i].Spaltenname, i == datensaetze.Count - 1 ? string.Empty : ";");
+            //}
+
+            //for(int indexWerte = 0; indexWerte < minAnzahl; indexWerte++)
+            //{
+            //    rueckgabe += Environment.NewLine;
+            //    for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
+            //    {
+            //        rueckgabe += String.Format("{0}{1}", datensaetze[indexDatensaetze].Werte[indexWerte], indexDatensaetze == datensaetze.Count - 1 ? String.Empty : ";");
+            //    }
+            //}
+
+            //return rueckgabe;
+        }
+
+        public static List<List<string>> MergeListListString(List<List<string>> werte, string trenner)
+        {
+            if(werte.Count() == 1)
             {
-                return String.Empty;
+                return werte;
             }
-
-            string rueckgabe = String.Empty;
-
-            for(int i = 0; i < datensaetze.Count; i++)
+            else
             {
-                rueckgabe += String.Format("{0}{1}{0}{2}", string.Empty, datensaetze[i].Spaltenname, i == datensaetze.Count - 1 ? string.Empty : ";");
-            }
-
-            for(int indexWerte = 0; indexWerte < minAnzahl; indexWerte++)
-            {
-                rueckgabe += Environment.NewLine;
-                for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
+                List<List<string>> neueWerte = new List<List<string>>();
+                for(int i = 0; i < werte.Count(); i += 2)
                 {
-                    rueckgabe += String.Format("{0}{1}", datensaetze[indexDatensaetze].Werte[indexWerte], indexDatensaetze == datensaetze.Count - 1 ? String.Empty : ";");
-                }
-            }
+                    if(werte.Count == i + 1)
+                    {
+                        neueWerte.Add(werte[i]);
+                    }
+                    else
+                    {
+                        IEnumerable<string> links = werte[i];
+                        IEnumerable<string> rechts = werte[i + 1];
 
-            return rueckgabe;
+                        List<string> ergebnis = Merge(links: links, rechts: rechts, trenner: trenner).ToList();
+                        neueWerte.Add(ergebnis);
+
+                    }
+                }
+
+                return MergeListListString(werte: neueWerte, trenner: trenner);
+            }
         }
 
         public static IEnumerable<string> Merge(IEnumerable<string> links, IEnumerable<string> rechts, string trenner)
@@ -81,34 +115,38 @@ namespace ASCFileMerger
             }
         }
 
-        public List<Datensatz> DateienAuslesenUndInDatensaetzeSpeichern()
+        public List<List<string>> DateienAuslesenUndInDatensaetzeSpeichern()
         {
             if(String.IsNullOrEmpty(columnName))
             {
                 throw new ArgumentException("Attribut für Spaltenname nicht angegeben");
             }
 
-            List<Datensatz> datensaetze = new List<Datensatz>();
+            List<List<string>> datensaetze = new List<List<string>>();
             foreach(string file in filenames)
             {
-                Datensatz aktuellerDatensatz = new Datensatz();
+                List<string> aktuellerDatensatz = new List<string>();
 
                 Encoding fileEncoding = GetEncoding(file);
+
+                bool headerGefunden = false;
 
                 string[] lines = File.ReadAllLines(file, fileEncoding);
                 foreach(string line in lines)
                 {
                     if(line.StartsWith(columnName))
                     {
-                        aktuellerDatensatz.Spaltenname = Regex.Replace(line, string.Format(@"{0}[\ ]*", columnName), String.Empty).Replace("\t", string.Empty);
+                        aktuellerDatensatz.Add(Regex.Replace(line, string.Format(@"{0}[\ ]*", columnName), String.Empty).Replace("\t", string.Empty));
+                        headerGefunden = true;
                     }
                     double wert;
                     if(Double.TryParse(line, out wert))
                     {
-                        aktuellerDatensatz.Werte.Add(wert);
+                        //aktuellerDatensatz.Werte.Add(wert);
+                        aktuellerDatensatz.Add(line);
                     }
                 }
-                if(String.IsNullOrEmpty(aktuellerDatensatz.Spaltenname))
+                if(!headerGefunden)
                 {
                     throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
