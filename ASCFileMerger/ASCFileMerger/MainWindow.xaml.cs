@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,6 @@ namespace ASCFileMerger
                 buttonGenerierenUndSpeichern.IsEnabled = true;
                 labelNDateienausgewaehlt.Content = String.Format("{0} Datei(-en) ausgewählt", fileNames.Count());
                 labelErgebnis.Content = String.Empty;
-                dataGridDatensaetze.DataContext = null;
             }
         }
 
@@ -97,7 +97,10 @@ namespace ASCFileMerger
 
         private void DateiSpeichern()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             string content = Merger.GeneriereTextAusgabe();
+            sw.Stop();
 
             FileInfo fi = new FileInfo(fileNames[0]);
 
@@ -114,7 +117,7 @@ namespace ASCFileMerger
 
                 File.WriteAllText(targetFileName, content);
 
-                labelErgebnis.Content = "Fertig";
+                labelErgebnis.Content = $"Fertig - {sw.Elapsed.ToString("mm\\:ss\\.fffffff")}";
             }
         }
 

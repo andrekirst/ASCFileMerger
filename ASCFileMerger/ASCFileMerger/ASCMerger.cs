@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ASCFileMerger
 {
@@ -140,9 +141,8 @@ namespace ASCFileMerger
                         headerGefunden = true;
                     }
                     double wert;
-                    if(Double.TryParse(line, out wert))
+                    if(double.TryParse(line, out wert))
                     {
-                        //aktuellerDatensatz.Werte.Add(wert);
                         aktuellerDatensatz.Add(line);
                     }
                 }
@@ -152,6 +152,7 @@ namespace ASCFileMerger
                 }
                 datensaetze.Add(aktuellerDatensatz);
             };
+
             return datensaetze;
         }
     }

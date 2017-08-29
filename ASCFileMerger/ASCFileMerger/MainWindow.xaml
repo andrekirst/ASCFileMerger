@@ -26,6 +26,5 @@
         <Button x:Name="buttonGenerierenUndSpeichern" Margin="5,10" Content="Generieren und Speichern" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="buttonGenerierenUndSpeichern_Click" IsEnabled="False" Grid.Row="3"/>
         <Label x:Name="labelNDateienausgewaehlt" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="0,7"/>
         <Label x:Name="labelErgebnis" Content="" HorizontalAlignment="Stretch" Margin="5,0,5,0" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" />
-        <DataGrid x:Name="dataGridDatensaetze" ItemsSource="{Binding}" Margin="5,5,5,5" AutoGenerateColumns="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.ColumnSpan="3" Grid.Row="4"/>
     </Grid>
 </Window>
