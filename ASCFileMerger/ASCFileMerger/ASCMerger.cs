@@ -112,7 +112,7 @@ namespace ASCFileMerger
         {
             for(int i = 0; i < links.Count(); i++)
             {
-                yield return $"{links.ElementAt(i)}{trenner}{rechts.ElementAt(i)}";
+                yield return links.ElementAt(i) + trenner + rechts.ElementAt(i);
             }
         }
 
@@ -122,9 +122,15 @@ namespace ASCFileMerger
             {
                 throw new ArgumentException("Attribut für Spaltenname nicht angegeben");
             }
+            object locker = new object();
+            Dictionary<int, List<string>> datensaetze = new Dictionary<int, List<string>>();
 
-            List<List<string>> datensaetze = new List<List<string>>();
-            foreach(string file in filenames)
+            ParallelOptions options = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = -1
+            };
+
+            Parallel.ForEach(filenames, options, (file, state, currentIndex) =>
             {
                 List<string> aktuellerDatensatz = new List<string>();
 
@@ -132,7 +138,7 @@ namespace ASCFileMerger
 
                 bool headerGefunden = false;
 
-                string[] lines = File.ReadAllLines(file, fileEncoding);
+                IEnumerable<string> lines = File.ReadLines(file, fileEncoding);
                 foreach(string line in lines)
                 {
                     if(line.StartsWith(columnName))
@@ -140,6 +146,7 @@ namespace ASCFileMerger
                         aktuellerDatensatz.Add(Regex.Replace(line, string.Format(@"{0}[\ ]*", columnName), String.Empty).Replace("\t", string.Empty));
                         headerGefunden = true;
                     }
+
                     double wert;
                     if(double.TryParse(line, out wert))
                     {
@@ -150,10 +157,13 @@ namespace ASCFileMerger
                 {
                     throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
-                datensaetze.Add(aktuellerDatensatz);
-            };
+                lock(locker)
+                {
+                    datensaetze.Add((int)currentIndex, aktuellerDatensatz);
+                }
+            });
 
-            return datensaetze;
+            return datensaetze.OrderBy(s => s.Key).Select(s => s.Value).ToList();
         }
     }
 }
