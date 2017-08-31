@@ -12,9 +12,9 @@ namespace ASCFileMerger
     public class ASCMerger
     {
         private string columnName;
-        private string[] filenames;
+        private IEnumerable<string> filenames;
 
-        public ASCMerger(string[] filenames, string columnName)
+        public ASCMerger(IEnumerable<string> filenames, string columnName)
         {
             this.filenames = filenames;
             this.columnName = columnName;
@@ -50,32 +50,6 @@ namespace ASCFileMerger
             List<string> liste = MergeListListString(werte: datensaetze, trenner: ";").FirstOrDefault();
 
             return string.Join(Environment.NewLine, liste);
-
-            //int minAnzahl = datensaetze.Min(d => d.Werte.Count);
-            //int maxAnzahl = datensaetze.Max(d => d.Werte.Count);
-
-            //if(minAnzahl != maxAnzahl)
-            //{
-            //    return String.Empty;
-            //}
-
-            //string rueckgabe = String.Empty;
-
-            //for(int i = 0; i < datensaetze.Count; i++)
-            //{
-            //    rueckgabe += String.Format("{0}{1}{0}{2}", string.Empty, datensaetze[i].Spaltenname, i == datensaetze.Count - 1 ? string.Empty : ";");
-            //}
-
-            //for(int indexWerte = 0; indexWerte < minAnzahl; indexWerte++)
-            //{
-            //    rueckgabe += Environment.NewLine;
-            //    for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
-            //    {
-            //        rueckgabe += String.Format("{0}{1}", datensaetze[indexDatensaetze].Werte[indexWerte], indexDatensaetze == datensaetze.Count - 1 ? String.Empty : ";");
-            //    }
-            //}
-
-            //return rueckgabe;
         }
 
         public static List<List<string>> MergeListListString(List<List<string>> werte, string trenner)
@@ -86,7 +60,8 @@ namespace ASCFileMerger
             }
             else
             {
-                List<List<string>> neueWerte = new List<List<string>>();
+                List<List<string>> neueWerte = new List<List<string>>((werte.Count() / 2) + 1);
+
                 for(int i = 0; i < werte.Count(); i += 2)
                 {
                     if(werte.Count == i + 1)
@@ -100,7 +75,6 @@ namespace ASCFileMerger
 
                         List<string> ergebnis = Merge(links: links, rechts: rechts, trenner: trenner).ToList();
                         neueWerte.Add(ergebnis);
-
                     }
                 }
 
@@ -116,6 +90,11 @@ namespace ASCFileMerger
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException" />
         public List<List<string>> DateienAuslesenUndInDatensaetzeSpeichern()
         {
             if(String.IsNullOrEmpty(columnName))
@@ -140,6 +119,7 @@ namespace ASCFileMerger
                 Encoding fileEncoding = GetEncoding(file);
 
                 bool headerGefunden = false;
+                bool datenGefunden = false;
 
                 IEnumerable<string> lines = File.ReadLines(file, fileEncoding);
                 foreach(string line in lines)
@@ -151,12 +131,20 @@ namespace ASCFileMerger
                     }
                     else
                     {
-                        char firstChar = line[0];
-                        int firstCharInt = firstChar;
-
-                        if(firstChar == '-' || (firstCharInt >= char0 && firstCharInt <= char9))
+                        if(datenGefunden)
                         {
                             aktuellerDatensatz.Add(line);
+                        }
+                        else
+                        {
+                            char firstChar = line.First();
+                            int firstCharInt = firstChar;
+
+                            if(firstChar == '-' || (firstCharInt >= char0 && firstCharInt <= char9))
+                            {
+                                aktuellerDatensatz.Add(line);
+                                datenGefunden = true;
+                            }
                         }
                     }
                 }
