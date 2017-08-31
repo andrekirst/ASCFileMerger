@@ -115,13 +115,13 @@ namespace ASCFileMerger
             Parallel.ForEach(filenames, options, (file, state, currentIndex) =>
             {
                 List<string> aktuellerDatensatz = new List<string>();
-
                 Encoding fileEncoding = GetEncoding(file);
 
                 bool headerGefunden = false;
                 bool datenGefunden = false;
 
                 IEnumerable<string> lines = File.ReadLines(file, fileEncoding);
+
                 foreach(string line in lines)
                 {
                     if(!headerGefunden && line.StartsWith(columnName))
@@ -148,10 +148,12 @@ namespace ASCFileMerger
                         }
                     }
                 }
+
                 if(!headerGefunden)
                 {
                     throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
+
                 lock(locker)
                 {
                     datensaetze.Add((int)currentIndex, aktuellerDatensatz);

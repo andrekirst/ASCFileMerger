@@ -59,40 +59,6 @@ namespace ASCFileMerger
             Merger = new ASCFileMerger.ASCMerger(fileNames, textBoxSpaltenname.Text);
 
             DateiSpeichern();
-            DataGridFuellen();
-        }
-
-        private void DataGridFuellen()
-        {
-            //try
-            //{
-            //    DataTable dataTable = new DataTable();
-
-            //    List<List<string>> datensaetze = Merger.DateienAuslesenUndInDatensaetzeSpeichern();
-
-            //    foreach(List<string> datensatz in datensaetze)
-            //    {
-            //        dataTable.Columns.Add(datensatz[0], typeof(double));
-            //    }
-
-            //    for(int indexWerte = 0; indexWerte < datensaetze[0].Werte.Count(); indexWerte++)
-            //    {
-            //        DataRow row = dataTable.NewRow();
-
-            //        for(int indexDatensaetze = 0; indexDatensaetze < datensaetze.Count; indexDatensaetze++)
-            //        {
-            //            row[datensaetze[indexDatensaetze].Spaltenname] = datensaetze[indexDatensaetze].Werte[indexWerte];
-            //        }
-            //        dataTable.Rows.Add(row);
-            //    }
-
-            //    dataGridDatensaetze.DataContext = dataTable;
-            //}
-            //catch(Exception ex)
-            //{
-
-            //    throw ex;
-            //}
         }
 
         private void DateiSpeichern()
