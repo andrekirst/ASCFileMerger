@@ -130,6 +130,9 @@ namespace ASCFileMerger
                 MaxDegreeOfParallelism = -1
             };
 
+            int char0 = '0';
+            int char9 = '9';
+
             Parallel.ForEach(filenames, options, (file, state, currentIndex) =>
             {
                 List<string> aktuellerDatensatz = new List<string>();
@@ -141,16 +144,20 @@ namespace ASCFileMerger
                 IEnumerable<string> lines = File.ReadLines(file, fileEncoding);
                 foreach(string line in lines)
                 {
-                    if(line.StartsWith(columnName))
+                    if(!headerGefunden && line.StartsWith(columnName))
                     {
                         aktuellerDatensatz.Add(Regex.Replace(line, string.Format(@"{0}[\ ]*", columnName), String.Empty).Replace("\t", string.Empty));
                         headerGefunden = true;
                     }
-
-                    double wert;
-                    if(double.TryParse(line, out wert))
+                    else
                     {
-                        aktuellerDatensatz.Add(line);
+                        char firstChar = line[0];
+                        int firstCharInt = firstChar;
+
+                        if(firstChar == '-' || (firstCharInt >= char0 && firstCharInt <= char9))
+                        {
+                            aktuellerDatensatz.Add(line);
+                        }
                     }
                 }
                 if(!headerGefunden)
