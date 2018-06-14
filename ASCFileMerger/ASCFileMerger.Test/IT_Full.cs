@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Collections.Generic;
 
 namespace ASCFileMerger.Test
 {
@@ -11,7 +12,7 @@ namespace ASCFileMerger.Test
         [TestMethod, TestCategory("IntegrationTest")]
         public void IT_Full_Merge_2_Files()
         {
-            string[] fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten");
+            List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten").ToList();
 
             ASCMerger merger = new ASCMerger(filenames: fileNames, columnName: "ColumnName");
 
@@ -39,7 +40,7 @@ namespace ASCFileMerger.Test
         [TestMethod, TestCategory("IntegrationTest")]
         public void IT_Full_Merge_8_Files_10000_Zeilen()
         {
-            string[] fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten_Anzahl_10000");
+            List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten_Anzahl_10000").ToList();
 
             ASCMerger merger = new ASCMerger(filenames: fileNames, columnName: "ColumnName");
 

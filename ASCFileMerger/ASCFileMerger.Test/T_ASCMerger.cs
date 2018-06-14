@@ -12,7 +12,7 @@ namespace ASCFileMerger.Test
         [TestMethod]
         public void ASCMerger_Lese_Dateien_aus_und_speichere_Datensatz()
         {
-            string[] fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten");
+            List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten").ToList();
 
             ASCMerger merger = new ASCMerger(filenames: fileNames, columnName: "ColumnName");
 
@@ -30,8 +30,8 @@ namespace ASCFileMerger.Test
         [TestMethod]
         public void Merge_2_Arrays_in_ein_Array_mit_jeweils_1_Header_1_Datenzeile()
         {
-            string[] links = new string[] { "\"HeaderLinks\"", "\"Wert1\"" };
-            string[] rechts = new string[] { "\"HeaderRechts\"", "\"Wert2\"" };
+            List<string> links = new string[] { "\"HeaderLinks\"", "\"Wert1\"" }.ToList();
+            List<string> rechts = new string[] { "\"HeaderRechts\"", "\"Wert2\"" }.ToList();
             string trenner = ";";
 
             IEnumerable<string> expected = (new string[] { "\"HeaderLinks\";\"HeaderRechts\"", "\"Wert1\";\"Wert2\"" }).AsEnumerable();

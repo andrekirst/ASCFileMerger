@@ -4,27 +4,25 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace ASCFileMerger
 {
     public class ASCMerger
     {
-        private string columnName;
-        private IEnumerable<string> filenames;
+        private string _columnName;
+        private List<string> _filenames;
 
-        public ASCMerger(IEnumerable<string> filenames, string columnName)
+        public ASCMerger(List<string> filenames, string columnName)
         {
-            this.filenames = filenames;
-            this.columnName = columnName;
+            _filenames = filenames;
+            _columnName = columnName;
         }
 
-        private Encoding GetEncoding(string filename)
+        public Encoding GetEncoding(string filename)
         {
             // Read the BOM
             var bom = new byte[4];
-            using(var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
+            using(FileStream file = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
                 file.Read(bom, 0, 4);
             }
@@ -47,9 +45,10 @@ namespace ASCFileMerger
         {
             List<List<string>> datensaetze = DateienAuslesenUndInDatensaetzeSpeichern();
 
-            List<string> liste = MergeListListString(werte: datensaetze, trenner: ";").FirstOrDefault();
-
-            return string.Join(Environment.NewLine, liste);
+            List<string> liste = MergeListListString(werte: datensaetze, trenner: ";")[0];
+            
+            string content = string.Join(Environment.NewLine, liste);
+            return content;
         }
 
         public static List<List<string>> MergeListListString(List<List<string>> werte, string trenner)
@@ -60,20 +59,21 @@ namespace ASCFileMerger
             }
             else
             {
-                List<List<string>> neueWerte = new List<List<string>>((werte.Count() / 2) + 1);
+                int werteCount = werte.Count;
+                List<List<string>> neueWerte = new List<List<string>>((werteCount / 2) + 1);
 
-                for(int i = 0; i < werte.Count(); i += 2)
+                for(int i = 0; i < werteCount; i += 2)
                 {
-                    if(werte.Count == i + 1)
+                    if(werteCount == i + 1)
                     {
                         neueWerte.Add(werte[i]);
                     }
                     else
                     {
-                        IEnumerable<string> links = werte[i];
-                        IEnumerable<string> rechts = werte[i + 1];
+                        List<string> links = werte[i];
+                        List<string> rechts = werte[i + 1];
 
-                        List<string> ergebnis = Merge(links: links, rechts: rechts, trenner: trenner).ToList();
+                        List<string> ergebnis = Merge(links: links, rechts: rechts, trenner: trenner);
                         neueWerte.Add(ergebnis);
                     }
                 }
@@ -82,12 +82,15 @@ namespace ASCFileMerger
             }
         }
 
-        public static IEnumerable<string> Merge(IEnumerable<string> links, IEnumerable<string> rechts, string trenner)
+        public static List<string> Merge(List<string> links, List<string> rechts, string trenner)
         {
-            for(int i = 0; i < links.Count(); i++)
+            int count = links.Count;
+            List<string> werte = new List<string>(count);
+            for(int i = 0; i < count; i++)
             {
-                yield return links.ElementAt(i) + trenner + rechts.ElementAt(i);
+                werte.Add(links[i] + trenner + rechts[i]);
             }
+            return werte;
         }
 
         /// <summary>
@@ -97,22 +100,16 @@ namespace ASCFileMerger
         /// <exception cref="ArgumentException" />
         public List<List<string>> DateienAuslesenUndInDatensaetzeSpeichern()
         {
-            if(String.IsNullOrEmpty(columnName))
+            if(String.IsNullOrEmpty(_columnName))
             {
                 throw new ArgumentException("Attribut für Spaltenname nicht angegeben");
             }
-            object locker = new object();
-            Dictionary<int, List<string>> datensaetze = new Dictionary<int, List<string>>();
-
-            ParallelOptions options = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = -1
-            };
+            List<List<string>> datensaetze = new List<List<string>>();
 
             int char0 = '0';
             int char9 = '9';
 
-            Parallel.ForEach(filenames, options, (file, state, currentIndex) =>
+            foreach(string file in _filenames)
             {
                 List<string> aktuellerDatensatz = new List<string>();
                 Encoding fileEncoding = GetEncoding(file);
@@ -120,13 +117,13 @@ namespace ASCFileMerger
                 bool headerGefunden = false;
                 bool datenGefunden = false;
 
-                IEnumerable<string> lines = File.ReadLines(file, fileEncoding);
+                string[] lines = File.ReadAllLines(file, fileEncoding);
 
-                foreach(string line in lines)
+                foreach (string line in lines)
                 {
-                    if(!headerGefunden && line.StartsWith(columnName))
+                    if(!headerGefunden && line.StartsWith(_columnName))
                     {
-                        aktuellerDatensatz.Add(Regex.Replace(line, string.Format(@"{0}[\ ]*", columnName), String.Empty).Replace("\t", string.Empty));
+                        aktuellerDatensatz.Add(Regex.Replace(line, string.Format(@"{0}[\ ]*", _columnName), String.Empty, RegexOptions.Compiled).Replace("\t", string.Empty));
                         headerGefunden = true;
                     }
                     else
@@ -137,7 +134,7 @@ namespace ASCFileMerger
                         }
                         else
                         {
-                            char firstChar = line.First();
+                            char firstChar = line[0];
                             int firstCharInt = firstChar;
 
                             if(firstChar == '-' || (firstCharInt >= char0 && firstCharInt <= char9))
@@ -154,13 +151,10 @@ namespace ASCFileMerger
                     throw new ArgumentException("Attribut für Spaltenname nicht gefunden");
                 }
 
-                lock(locker)
-                {
-                    datensaetze.Add((int)currentIndex, aktuellerDatensatz);
-                }
-            });
+                datensaetze.Add(aktuellerDatensatz);
+            }
 
-            return datensaetze.OrderBy(s => s.Key).Select(s => s.Value).ToList();
+            return datensaetze;
         }
     }
 }

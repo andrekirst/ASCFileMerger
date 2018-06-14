@@ -2,21 +2,11 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ASCFileMerger
 {
@@ -25,7 +15,7 @@ namespace ASCFileMerger
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string[] fileNames;
+        private List<string> _fileNames;
 
         public MainWindow()
         {
@@ -37,14 +27,16 @@ namespace ASCFileMerger
 
         private void buttonDateienAuswaehlen_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = true;
-            ofd.Filter = "ASC Dateien (*.asc)|*.asc|Alle Dateien (*.*)|*.*";
-            if(ofd.ShowDialog() == true)
+            OpenFileDialog ofd = new OpenFileDialog
             {
-                fileNames = ofd.FileNames;
+                Multiselect = true,
+                Filter = "ASC Dateien (*.asc)|*.asc|Alle Dateien (*.*)|*.*"
+            };
+            if (ofd.ShowDialog() == true)
+            {
+                _fileNames = ofd.FileNames.ToList();
                 buttonGenerierenUndSpeichern.IsEnabled = true;
-                labelNDateienausgewaehlt.Content = String.Format("{0} Datei(-en) ausgewählt", fileNames.Count());
+                labelNDateienausgewaehlt.Content = String.Format("{0} Datei(-en) ausgewählt", _fileNames.Count());
                 labelErgebnis.Content = String.Empty;
             }
         }
@@ -56,7 +48,7 @@ namespace ASCFileMerger
 
         private void buttonGenerierenUndSpeichern_Click(object sender, RoutedEventArgs e)
         {
-            Merger = new ASCFileMerger.ASCMerger(fileNames, textBoxSpaltenname.Text);
+            Merger = new ASCMerger(_fileNames, textBoxSpaltenname.Text);
 
             DateiSpeichern();
         }
@@ -68,12 +60,14 @@ namespace ASCFileMerger
             string content = Merger.GeneriereTextAusgabe();
             sw.Stop();
 
-            FileInfo fi = new FileInfo(fileNames[0]);
+            FileInfo fi = new FileInfo(_fileNames[0]);
 
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "CSV Dateien (*.csv)|*.csv|Alle Dateien (*.*)|*.*";
-            sfd.InitialDirectory = fi.DirectoryName;
-            sfd.FileName = string.Format("{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "CSV Dateien (*.csv)|*.csv|Alle Dateien (*.*)|*.*",
+                InitialDirectory = fi.DirectoryName,
+                FileName = string.Format("{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"))
+            };
 
             string targetFileName;
 
@@ -81,7 +75,10 @@ namespace ASCFileMerger
             {
                 targetFileName = sfd.FileName;
 
-                File.WriteAllText(targetFileName, content);
+                File.WriteAllText(
+                    path: targetFileName,
+                    contents: content,
+                    encoding: Merger.GetEncoding(_fileNames[0]));
 
                 labelErgebnis.Content = $"Fertig - {sw.Elapsed.ToString("mm\\:ss\\.fffffff")}";
             }
