@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger", "ASCFileMerger\ASCFileMerger.csproj", "{D7FDC23F-DF18-41CD-B026-F1084E5C133B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger.Library", "ASCFileMerger.Library\ASCFileMerger.Library.csproj", "{8AA63FDF-0CD8-4B5C-A7BC-14A04EFBC2D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger.Test", "ASCFileMerger.Test\ASCFileMerger.Test.csproj", "{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger.Library.Tests", "ASCFileMerger.Library.Tests\ASCFileMerger.Library.Tests.csproj", "{C4F98FD7-CC90-4B6E-8BE6-13082844769D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCFileMerger.UI.WPF", "ASCFileMerger.UI.WPF\ASCFileMerger.UI.WPF.csproj", "{829067E1-7636-46F6-A66B-5C7D4B194BE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7FDC23F-DF18-41CD-B026-F1084E5C133B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C630B07-59F8-45EF-A2CF-948BCE28AEF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA63FDF-0CD8-4B5C-A7BC-14A04EFBC2D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA63FDF-0CD8-4B5C-A7BC-14A04EFBC2D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA63FDF-0CD8-4B5C-A7BC-14A04EFBC2D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA63FDF-0CD8-4B5C-A7BC-14A04EFBC2D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4F98FD7-CC90-4B6E-8BE6-13082844769D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4F98FD7-CC90-4B6E-8BE6-13082844769D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4F98FD7-CC90-4B6E-8BE6-13082844769D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4F98FD7-CC90-4B6E-8BE6-13082844769D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829067E1-7636-46F6-A66B-5C7D4B194BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{829067E1-7636-46F6-A66B-5C7D4B194BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{829067E1-7636-46F6-A66B-5C7D4B194BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829067E1-7636-46F6-A66B-5C7D4B194BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51894A7A-797E-498E-90FB-80DA29FE2E4F}
 	EndGlobalSection
 EndGlobal

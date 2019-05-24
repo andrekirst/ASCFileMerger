@@ -1,15 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Xunit;
 
-namespace ASCFileMerger.Test
+namespace ASCFileMerger.Library.Test
 {
-    [TestClass]
     public class T_ASCMerger
     {
-        [TestMethod]
+        [Fact]
         public void ASCMerger_Lese_Dateien_aus_und_speichere_Datensatz()
         {
             List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten").ToList();
@@ -24,10 +24,10 @@ namespace ASCFileMerger.Test
                 new List<string>() { "Spalte2", "-3", "-2", "-2" }
             };
 
-            equalidator.Equalidator.AreEqual(expected, actual);
+            actual.ShouldBe(expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void Merge_2_Arrays_in_ein_Array_mit_jeweils_1_Header_1_Datenzeile()
         {
             List<string> links = new string[] { "\"HeaderLinks\"", "\"Wert1\"" }.ToList();
@@ -37,10 +37,11 @@ namespace ASCFileMerger.Test
             IEnumerable<string> expected = (new string[] { "\"HeaderLinks\";\"HeaderRechts\"", "\"Wert1\";\"Wert2\"" }).AsEnumerable();
             IEnumerable<string> actual = ASCMerger.Merge(links: links, rechts: rechts, trenner: trenner);
 
-            CollectionAssert.AreEqual(expected.ToList(), actual.ToList());
+            //CollectionAssert.AreEqual(expected.ToList(), actual.ToList());
+            actual.ShouldBe(expected);
         }
 
-        [TestMethod]
+        [Fact]
         public void MergeListListString_3_Einzel_List_Erwarte_Eine_List()
         {
             List<List<string>> werte = new List<List<string>>()
@@ -57,10 +58,11 @@ namespace ASCFileMerger.Test
 
             List<List<string>> actual = ASCMerger.MergeListListString(werte: werte, trenner: ";");
 
-            CollectionAssert.AreEqual(expected.First(), actual.First());
+            //CollectionAssert.AreEqual(expected.First(), actual.First());
+            actual.First().ShouldBe(expected.First());
         }
 
-        [TestMethod]
+        [Fact]
         public void MergeListListString_2_Einzel_List_Erwarte_Eine_List()
         {
             List<List<string>> werte = new List<List<string>>()
@@ -76,7 +78,8 @@ namespace ASCFileMerger.Test
 
             List<List<string>> actual = ASCMerger.MergeListListString(werte: werte, trenner: ";");
 
-            CollectionAssert.AreEqual(expected.First(), actual.First());
+            //CollectionAssert.AreEqual(expected.First(), actual.First());
+            actual.First().ShouldBe(expected.First());
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+﻿using Shouldly;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Xunit;
 
-namespace ASCFileMerger.Test
+namespace ASCFileMerger.Library.Test
 {
-    [TestClass]
     public class IT_Full
     {
-        [TestMethod, TestCategory("IntegrationTest")]
+        [Fact(DisplayName = "IntegrationTest")]
         public void IT_Full_Merge_2_Files()
         {
             List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten").ToList();
@@ -23,7 +23,8 @@ namespace ASCFileMerger.Test
                 "-3;-2" + Environment.NewLine +
                 "-2;-2";
 
-            Assert.AreEqual(expected, actual);
+            //Assert.AreEqual(expected, actual);
+            actual.ShouldBe(expected);
         }
 
         private static int Count4(string s)
@@ -37,7 +38,7 @@ namespace ASCFileMerger.Test
             return n + 1;
         }
 
-        [TestMethod, TestCategory("IntegrationTest")]
+        [Fact(DisplayName = "IntegrationTest")]
         public void IT_Full_Merge_8_Files_10000_Zeilen()
         {
             List<string> fileNames = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + @"\TestDaten_Anzahl_10000").ToList();
@@ -48,7 +49,7 @@ namespace ASCFileMerger.Test
 
             int expected = 10001;
 
-            Assert.AreEqual(expected, actual);
+            actual.ShouldBe(expected);
         }
     }
 }

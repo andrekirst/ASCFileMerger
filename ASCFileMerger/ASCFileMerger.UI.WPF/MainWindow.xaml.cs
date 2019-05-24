@@ -1,5 +1,4 @@
-﻿using ASCFileMerger.Properties;
-using Microsoft.Win32;
+﻿using ASCFileMerger.Library;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,8 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-namespace ASCFileMerger
+namespace ASCFileMerger.UI.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -21,8 +28,8 @@ namespace ASCFileMerger
         {
             InitializeComponent();
 
-            Settings.Default.Reload();
-            textBoxSpaltenname.Text = Settings.Default.DefaultColumnName;
+            //Settings.Default.Reload();
+            //textBoxSpaltenname.Text = Settings.Default.DefaultColumnName;
         }
 
         private void buttonDateienAuswaehlen_Click(object sender, RoutedEventArgs e)
@@ -32,7 +39,7 @@ namespace ASCFileMerger
                 Multiselect = true,
                 Filter = "ASC Dateien (*.asc)|*.asc|Alle Dateien (*.*)|*.*"
             };
-            if (ofd.ShowDialog() == true)
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 _fileNames = ofd.FileNames.ToList();
                 buttonGenerierenUndSpeichern.IsEnabled = true;
@@ -48,7 +55,7 @@ namespace ASCFileMerger
 
         private void buttonGenerierenUndSpeichern_Click(object sender, RoutedEventArgs e)
         {
-            Merger = new ASCMerger(_fileNames, textBoxSpaltenname.Text);
+            Merger = new ASCFileMerger.Library.ASCMerger(_fileNames, textBoxSpaltenname.Text);
 
             DateiSpeichern();
         }
@@ -66,12 +73,12 @@ namespace ASCFileMerger
             {
                 Filter = "CSV Dateien (*.csv)|*.csv|Alle Dateien (*.*)|*.*",
                 InitialDirectory = fi.DirectoryName,
-                FileName = string.Format("{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss"))
+                FileName = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.csv"
             };
 
             string targetFileName;
 
-            if(sfd.ShowDialog() == true)
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 targetFileName = sfd.FileName;
 
@@ -86,8 +93,8 @@ namespace ASCFileMerger
 
         private void textBoxSpaltenname_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Settings.Default.DefaultColumnName = textBoxSpaltenname.Text;
-            Settings.Default.Save();
+            //Settings.Default.DefaultColumnName = textBoxSpaltenname.Text;
+            //Settings.Default.Save();
         }
     }
 }
